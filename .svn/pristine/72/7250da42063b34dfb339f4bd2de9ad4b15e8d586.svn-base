@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<configuration>
-    <configSections>
-    </configSections>
-    <connectionStrings>
-        <add name="lib.Visual.Properties.Settings.gouveaConnectionString" connectionString="server=localhost;user id=root;Password=root;persist security info=True;database=gouvea" providerName="MySql.Data.MySqlClient"/>
-    </connectionStrings>
-<startup><supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.0"/></startup></configuration>
