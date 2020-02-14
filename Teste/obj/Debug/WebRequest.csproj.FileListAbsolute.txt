@@ -1,0 +1,13 @@
+D:\PROJECTS\RckSoftware\Framework\Teste\bin\Debug\Interop.SpeechLib.dll
+D:\PROJECTS\RckSoftware\Framework\Teste\bin\Debug\Teste.exe.config
+D:\PROJECTS\RckSoftware\Framework\Teste\bin\Debug\Teste.exe
+D:\PROJECTS\RckSoftware\Framework\Teste\bin\Debug\Teste.pdb
+D:\PROJECTS\RckSoftware\Framework\Teste\bin\Debug\lib.Class.dll
+D:\PROJECTS\RckSoftware\Framework\Teste\bin\Debug\lib.Class.pdb
+D:\PROJECTS\RckSoftware\Framework\Teste\obj\Debug\WebRequest.csprojAssemblyReference.cache
+D:\PROJECTS\RckSoftware\Framework\Teste\obj\Debug\Teste.TesteWebRequest.resources
+D:\PROJECTS\RckSoftware\Framework\Teste\obj\Debug\Teste.Properties.Resources.resources
+D:\PROJECTS\RckSoftware\Framework\Teste\obj\Debug\WebRequest.csproj.GenerateResource.cache
+D:\PROJECTS\RckSoftware\Framework\Teste\obj\Debug\WebRequest.csproj.CopyComplete
+D:\PROJECTS\RckSoftware\Framework\Teste\obj\Debug\Teste.exe
+D:\PROJECTS\RckSoftware\Framework\Teste\obj\Debug\Teste.pdb

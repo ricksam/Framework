@@ -1,0 +1,733 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Reflection;
+
+namespace lib.Class
+{
+  public class Reflection
+  {
+    public Reflection(object o, bool CaseSensitive = false)
+    {
+      this.CaseSensitive = CaseSensitive;
+      this.cnv = new Conversion();
+      this._o = o;
+
+      this.Fields = this._o.GetType().GetFields();
+      this.Properties = this._o.GetType().GetProperties();
+
+      this.fields = GetFields();
+      this.properties = GetProperties();
+    }
+
+    private bool CaseSensitive { get; set; }
+    private object _o { get; set; }
+    public FieldInfo[] Fields { get; set; }
+    public PropertyInfo[] Properties { get; set; }
+    private Conversion cnv { get; set; }
+    private string[] fields { get; set; }
+    private string[] properties { get; set; }
+    public bool FieldExists(string FieldName)
+    {
+      for (int i = 0; i < fields.Length; i++)
+      {
+        if (fields[i] == FieldName)
+        { return true; }
+      }
+      return false;
+    }
+
+    public bool PropertyExists(string PropertyName)
+    {
+      for (int i = 0; i < properties.Length; i++)
+      {
+        if (properties[i] == PropertyName)
+        { return true; }
+      }
+      return false;
+    }
+
+    public bool AttibuteExists(string AttributeName)
+    {
+      return FieldExists(AttributeName) || PropertyExists(AttributeName);
+    }
+
+    private int IndexField(string FieldName)
+    {
+      for (int i = 0; i < fields.Length; i++)
+      {
+        if (CaseSensitive)
+        {
+          if (fields[i] == FieldName)
+          { return i; }
+        }
+        else
+        {
+          if (fields[i].ToUpper() == FieldName.ToUpper())
+          { return i; }
+        }
+
+      }
+      return -1;
+    }
+
+    private int IndexProperty(string PropertyName)
+    {
+      for (int i = 0; i < properties.Length; i++)
+      {
+        if (CaseSensitive)
+        {
+          if (properties[i] == PropertyName)
+          { return i; }
+        }
+        else
+        {
+          if (properties[i].ToUpper() == PropertyName.ToUpper())
+          { return i; }
+        }
+      }
+      return -1;
+    }
+
+    public string[] GetFields()
+    {
+      string[] sl = new string[Fields.Length];
+      for (int i = 0; i < Fields.Length; i++)
+      { sl[i] = Fields[i].Name; }
+      return sl;
+    }
+
+    public string[] GetProperties()
+    {
+      string[] sl = new string[Properties.Length];
+      for (int i = 0; i < Properties.Length; i++)
+      { sl[i] = Properties[i].Name; }
+      return sl;
+    }
+
+    public string[] GetAttributes()
+    {
+      List<string> lst = new List<string>();
+      lst.AddRange(fields);
+      lst.AddRange(properties);
+      return lst.ToArray();
+    }
+
+    /*public string[] GetAttributes(bool OmitDefaultFields)
+    {
+      List<string> lst = new List<string>();
+      string[] Attributes = GetAttributes();
+
+      for (int i = 0; i < Attributes.Length; i++)
+      {
+        if (OmitDefaultFields && IsDefaultValue(Attributes[i]))
+        { continue; }
+
+        lst.Add(Attributes[i]);
+      }
+
+      return lst.ToArray();
+    }*/
+
+    public object GetFieldValue(string FieldName)
+    {
+      return GetFieldValue(GetFieldInfo(FieldName));
+    }
+
+    public FieldInfo GetFieldInfo(string FieldName)
+    {
+      FieldInfo fi;
+      if (this._o != null)
+      {
+        for (int i = 0; i < Fields.Length; i++)
+        {
+          fi = Fields[i];
+          if (fi.Name == FieldName)
+          { return fi; }
+        }
+      }
+      return null;
+    }
+
+    public object GetFieldValue(FieldInfo fi)
+    {
+      return fi.GetValue(this._o);
+    }
+
+    public object GetPropertyValue(string PropertyName)
+    {
+      return GetPropertyValue(GetPropertyInfo(PropertyName));
+    }
+    public PropertyInfo GetPropertyInfo(string PropertyName)
+    {
+      PropertyInfo pi;
+      if (this._o != null)
+      {
+        for (int i = 0; i < Properties.Length; i++)
+        {
+          pi = Properties[i];
+          if (pi.Name == PropertyName && pi.CanRead)
+          { return pi; }
+        }
+      }
+      return null;
+    }
+
+    public object GetPropertyValue(PropertyInfo pi)
+    { return pi.GetValue(this._o, null); }
+
+    public object GetAttributeValue(string AttibuteName)
+    {
+      int Idx;
+      if ((Idx = IndexField(AttibuteName)) != -1)
+      { return GetFieldValue(Fields[Idx]); }
+
+      if ((Idx = IndexProperty(AttibuteName)) != -1)
+      { return GetPropertyValue(Properties[Idx]); }
+      return null;
+    }
+
+
+    public Type GetAttributeType(string AttributeName)
+    {
+      for (int i = 0; i < Fields.Length; i++)
+      {
+        if (Fields[i].Name == AttributeName)
+        { return Fields[i].FieldType; }
+      }
+
+      for (int i = 0; i < Properties.Length; i++)
+      {
+        if (Properties[i].Name == AttributeName)
+        { return Properties[i].PropertyType; }
+      }
+
+      return typeof(string);
+    }
+
+
+    private object GetDefultValue(Type ToType)
+    {
+      if (ToType == typeof(string))
+      { return cnv.ToString(""); }
+      else if (ToType == typeof(int))
+      { return cnv.ToInt(0); }
+      else if (ToType == typeof(long))
+      { return cnv.ToLong(0); }
+      else if (ToType == typeof(decimal))
+      { return cnv.ToDecimal(0); }
+      else if (ToType == typeof(double))
+      { return cnv.ToDouble(0); }
+      else if (ToType == typeof(DateTime))
+      { return cnv.ToDateTime(DateTime.MinValue); }
+      else if (ToType == typeof(bool))
+      { return cnv.ToBool(false); }
+      return null;
+    }
+
+    private object GetValue(Type ToType, object Value)
+    {
+      if (ToType == typeof(string))
+      { return cnv.ToString(Value); }
+      else if (ToType == typeof(int))
+      { return cnv.ToInt(Value); }
+      else if (ToType == typeof(long))
+      { return cnv.ToLong(Value); }
+      else if (ToType == typeof(decimal))
+      { return cnv.ToDecimal(Value); }
+      else if (ToType == typeof(double))
+      { return cnv.ToDouble(Value); }
+      else if (ToType == typeof(DateTime))
+      { return cnv.ToDateTime(Value); }
+      else if (ToType == typeof(bool))
+      { return cnv.ToBool(Value); }
+      else
+      {
+        if (Value != null)
+        {
+          if (ToType == Value.GetType())
+          { return Value; }
+        }
+      }
+      return null;
+    }
+
+    public void SetField(string FieldName, object Value)
+    {
+      FieldInfo fi;
+      if (this._o != null)
+      {
+        for (int i = 0; i < Fields.Length; i++)
+        {
+          fi = Fields[i];
+          if (fi.Name == FieldName)
+          {
+            SetField(fi, Value);
+            break;
+          }
+        }
+      }
+    }
+
+    public void SetField(FieldInfo fi, object Value)
+    {
+        if (!fi.IsStatic)
+        {
+            fi.SetValue(this._o, GetValue(fi.FieldType, Value));
+        }
+    }
+
+    public void SetProperty(string PropertyName, object Value)
+    {
+      PropertyInfo pi;
+      if (this._o != null)
+      {
+        for (int i = 0; i < Properties.Length; i++)
+        {
+          pi = Properties[i];
+          if (pi.Name == PropertyName)
+          {
+            SetProperty(pi, Value);
+            break;
+          }
+        }
+      }
+    }
+
+    public void SetProperty(PropertyInfo pi, object Value)
+    {
+      if (pi.CanWrite)
+      { pi.SetValue(this._o, GetValue(pi.PropertyType, Value), null); }
+    }
+
+    public void SetAttibute(string AttibuteName, object Value)
+    {
+      int Idx;
+      if ((Idx = IndexField(AttibuteName)) != -1)
+      { SetField(Fields[Idx], Value); }
+
+      if ((Idx = IndexProperty(AttibuteName)) != -1)
+      { SetProperty(Properties[Idx], Value); }
+    }
+
+
+
+    public void CopyTo(object Target)
+    {
+      Reflection ob_a = new Reflection(Target);
+
+      string[] atrs = this.GetAttributes();
+      for (int i = 0; i < atrs.Length; i++)
+      {
+        object Value = this.GetAttributeValue(atrs[i]);
+        ob_a.SetAttibute(atrs[i], Value);
+      }
+    }
+
+
+
+    public void Clear()
+    {
+      for (int i = 0; i < Fields.Length; i++)
+      { SetField(Fields[i], GetDefultValue(Fields[i].FieldType)); }
+
+      for (int i = 0; i < Properties.Length; i++)
+      { SetProperty(Properties[i], GetDefultValue(Properties[i].PropertyType)); }
+    }
+
+
+
+    public bool IsDefaultValue(string AttributeName)
+    {
+      Type tp = GetAttributeType(AttributeName);
+
+      object Value = GetAttributeValue(AttributeName);
+      object DefaultValue = GetDefultValue(tp);
+
+      if (Value == null || Value.Equals(DefaultValue))
+      { return true; }
+      else
+      { return false; }
+    }
+
+    public bool IsDefaultValue(System.Reflection.FieldInfo fi)
+    {
+      Type tp = fi.FieldType;
+
+      object Value = GetFieldValue(fi);
+      object DefaultValue = GetDefultValue(tp);
+
+      if (Value == null || Value.Equals(DefaultValue))
+      { return true; }
+      else
+      { return false; }
+    }
+
+    public bool IsDefaultValue(System.Reflection.PropertyInfo pi)
+    {
+      Type tp = pi.PropertyType;
+
+      object Value = GetPropertyValue(pi);
+      object DefaultValue = GetDefultValue(tp);
+
+      if (Value == null || Value.Equals(DefaultValue))
+      { return true; }
+      else
+      { return false; }
+    }
+
+  }
+  /*
+  public class Reflection
+  {
+    #region Constructor
+    public Reflection(object o, bool CaseSensitive = false)
+    {
+      this.CaseSensitive = CaseSensitive;
+      this.cnv = new Conversion();
+      this._o = o;
+
+      this.Fields = this._o.GetType().GetFields();
+      this.Properties = this._o.GetType().GetProperties();
+
+      this.fields = GetFields();
+      this.properties = GetProperties();
+    }
+    #endregion
+
+    #region Fields
+    private bool CaseSensitive { get; set; }
+    private object _o { get; set; }
+    public FieldInfo[] Fields { get; set; }
+    public PropertyInfo[] Properties { get; set; }
+    private Conversion cnv { get; set; }
+    private string[] fields { get; set; }
+    private string[] properties { get; set; }
+    #endregion
+
+    #region Field Property Attribute Exists
+    public bool FieldExists(string FieldName)
+    {
+      for (int i = 0; i < fields.Length; i++)
+      {
+        if (fields[i] == FieldName)
+        { return true; }
+      }
+      return false;
+    }
+
+    public bool PropertyExists(string PropertyName)
+    {
+      for (int i = 0; i < properties.Length; i++)
+      {
+        if (properties[i] == PropertyName)
+        { return true; }
+      }
+      return false;
+    }
+
+    public bool AttibuteExists(string AttributeName)
+    {
+      return FieldExists(AttributeName) || PropertyExists(AttributeName);
+    }
+    #endregion
+
+    #region Index Field Property Attribute
+    private int IndexField(string FieldName)
+    {
+      for (int i = 0; i < fields.Length; i++)
+      {
+        if (CaseSensitive)
+        {
+          if (fields[i] == FieldName)
+          { return i; }
+        }
+        else
+        {
+          if (fields[i].ToUpper() == FieldName.ToUpper())
+          { return i; }
+        }
+
+      }
+      return -1;
+    }
+
+    private int IndexProperty(string PropertyName)
+    {
+      for (int i = 0; i < properties.Length; i++)
+      {
+        if (CaseSensitive)
+        {
+          if (properties[i] == PropertyName)
+          { return i; }
+        }
+        else
+        {
+          if (properties[i].ToUpper() == PropertyName.ToUpper())
+          { return i; }
+        }
+      }
+      return -1;
+    }
+    #endregion
+
+    #region Get Fields Properties Attibutes
+    public string[] GetFields()
+    {
+      string[] sl = new string[Fields.Length];
+      for (int i = 0; i < Fields.Length; i++)
+      { sl[i] = Fields[i].Name; }
+      return sl;
+    }
+
+    public string[] GetProperties()
+    {
+      string[] sl = new string[Properties.Length];
+      for (int i = 0; i < Properties.Length; i++)
+      { sl[i] = Properties[i].Name; }
+      return sl;
+    }
+
+    public string[] GetAttributes()
+    {
+      List<string> lst = new List<string>();
+      lst.AddRange(fields);
+      lst.AddRange(properties);
+      return lst.ToArray();
+    }
+
+    public string[] GetAttributes(bool OmitDefaultFields)
+    {
+      List<string> lst = new List<string>();
+      string[] Attributes = GetAttributes();
+
+      for (int i = 0; i < Attributes.Length; i++)
+      {
+        if (OmitDefaultFields && IsDefaultValue(Attributes[i]))
+        { continue; }
+
+        lst.Add(Attributes[i]);
+      }
+
+      return lst.ToArray();
+    }
+    #endregion
+
+    #region Get Field Property Attibute
+    public object GetField(string FieldName)
+    {
+      FieldInfo fi;
+      if (this._o != null)
+      {
+        for (int i = 0; i < Fields.Length; i++)
+        {
+          fi = Fields[i];
+          if (fi.Name == FieldName)
+          { return GetField(fi); }
+        }
+      }
+      return null;
+    }
+
+    public object GetField(FieldInfo fi)
+    {
+      return fi.GetValue(this._o);
+    }
+
+    public object GetProperty(string PropertyName)
+    {
+      PropertyInfo pi;
+      if (this._o != null)
+      {
+        for (int i = 0; i < Properties.Length; i++)
+        {
+          pi = Properties[i];
+          if (pi.Name == PropertyName && pi.CanRead)
+          { return GetProperty(pi); }
+        }
+      }
+      return null;
+    }
+
+    public object GetProperty(PropertyInfo pi)
+    { return pi.GetValue(this._o, null); }
+
+    public object GetAttribute(string AttibuteName)
+    {
+      int Idx;
+      if ((Idx = IndexField(AttibuteName)) != -1)
+      { return GetField(Fields[Idx]); }
+
+      if ((Idx = IndexProperty(AttibuteName)) != -1)
+      { return GetProperty(Properties[Idx]); }
+      return null;
+    }
+    #endregion
+
+    #region GetAttributeType()
+    public Type GetAttributeType(string AttributeName)
+    {
+      for (int i = 0; i < Fields.Length; i++)
+      {
+        if (Fields[i].Name == AttributeName)
+        { return Fields[i].FieldType; }
+      }
+
+      for (int i = 0; i < Properties.Length; i++)
+      {
+        if (Properties[i].Name == AttributeName)
+        { return Properties[i].PropertyType; }
+      }
+
+      return typeof(string);
+    }
+    #endregion
+
+    #region private object GetDefultValue(Type ToType)
+    private object GetDefultValue(Type ToType)
+    {
+      if (ToType == typeof(string))
+      { return cnv.ToString(""); }
+      else if (ToType == typeof(int))
+      { return cnv.ToInt(0); }
+      else if (ToType == typeof(long))
+      { return cnv.ToLong(0); }
+      else if (ToType == typeof(decimal))
+      { return cnv.ToDecimal(0); }
+      else if (ToType == typeof(double))
+      { return cnv.ToDouble(0); }
+      else if (ToType == typeof(DateTime))
+      { return cnv.ToDateTime(DateTime.MinValue); }
+      else if (ToType == typeof(bool))
+      { return cnv.ToBool(false); }
+      return null;
+    }
+    #endregion
+
+    #region private object GetValue(Type ToType, object Value)
+    private object GetValue(Type ToType, object Value)
+    {
+      if (ToType == typeof(string))
+      { return cnv.ToString(Value); }
+      else if (ToType == typeof(int))
+      { return cnv.ToInt(Value); }
+      else if (ToType == typeof(long))
+      { return cnv.ToLong(Value); }
+      else if (ToType == typeof(decimal))
+      { return cnv.ToDecimal(Value); }
+      else if (ToType == typeof(DateTime))
+      { return cnv.ToDateTime(Value); }
+      else if (ToType == typeof(bool))
+      { return cnv.ToBool(Value); }
+      else
+      {
+        if (Value != null)
+        {
+          if (ToType == Value.GetType())
+          { return Value; }
+        }
+      }
+      return null;
+    }
+    #endregion
+
+    #region Set Field Property Attibute
+    public void SetField(string FieldName, object Value)
+    {
+      FieldInfo fi;
+      if (this._o != null)
+      {
+        for (int i = 0; i < Fields.Length; i++)
+        {
+          fi = Fields[i];
+          if (fi.Name == FieldName)
+          {
+            SetField(fi, Value);
+            break;
+          }
+        }
+      }
+    }
+
+    public void SetField(FieldInfo fi, object Value)
+    {
+      fi.SetValue(this._o, GetValue(fi.FieldType, Value));
+    }
+
+    public void SetProperty(string PropertyName, object Value)
+    {
+      PropertyInfo pi;
+      if (this._o != null)
+      {
+        for (int i = 0; i < Properties.Length; i++)
+        {
+          pi = Properties[i];
+          if (pi.Name == PropertyName)
+          {
+            SetProperty(pi, Value);
+            break;
+          }
+        }
+      }
+    }
+
+    public void SetProperty(PropertyInfo pi, object Value)
+    {
+      if (pi.CanWrite)
+      { pi.SetValue(this._o, GetValue(pi.PropertyType, Value), null); }
+    }
+
+    public void SetAttibute(string AttibuteName, object Value)
+    {
+      int Idx;
+      if ((Idx = IndexField(AttibuteName)) != -1)
+      { SetField(Fields[Idx], Value); }
+
+      if ((Idx = IndexProperty(AttibuteName)) != -1)
+      { SetProperty(Properties[Idx], Value); }
+    }
+    #endregion
+
+    #region public void CopyTo(object Target)
+    public void CopyTo(object Target)
+    {
+      Reflection ob_a = new Reflection(Target);
+
+      string[] atrs = this.GetAttributes();
+      for (int i = 0; i < atrs.Length; i++)
+      {
+        object Value = this.GetAttribute(atrs[i]);
+        ob_a.SetAttibute(atrs[i], Value);
+      }
+    }
+    #endregion
+
+    #region public void Clear()
+    public void Clear()
+    {
+      for (int i = 0; i < Fields.Length; i++)
+      { SetField(Fields[i], GetDefultValue(Fields[i].FieldType)); }
+
+      for (int i = 0; i < Properties.Length; i++)
+      { SetProperty(Properties[i], GetDefultValue(Properties[i].PropertyType)); }
+    }
+    #endregion
+
+    #region public bool IsDefaultValue(string AttributeName)
+    public bool IsDefaultValue(string AttributeName)
+    {
+      Type tp = GetAttributeType(AttributeName);
+
+      object Value = GetAttribute(AttributeName);
+      object DefaultValue = GetDefultValue(tp);
+
+      if (Value == null || Value.Equals(DefaultValue))
+      { return true; }
+      else
+      { return false; }
+    }
+    #endregion
+  }
+  */
+}

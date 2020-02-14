@@ -1,0 +1,333 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E168A2F0-C4C5-48C9-B915-CC88BFAE8980}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>lib.Visual</RootNamespace>
+    <AssemblyName>lib.Visual</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DirectShowLib">
+      <HintPath>..\..\LIB\WEBCAM\DirectShowLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Emgu.CV">
+      <HintPath>..\..\LIB\WEBCAM\Emgu.CV.dll</HintPath>
+    </Reference>
+    <Reference Include="Emgu.Util">
+      <HintPath>..\..\LIB\WEBCAM\Emgu.Util.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Touchless.Vision">
+      <HintPath>..\..\LIB\WEBCAM\Touchless.Vision.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Components\BorderDrawer.cs" />
+    <Compile Include="Components\HL_RichTextBox\SyntaxHighlightSegmentList .cs" />
+    <Compile Include="Components\HL_RichTextBox\SyntaxHighlightSegment.cs" />
+    <Compile Include="Components\HL_RichTextBox\SyntaxHighlightItem.cs" />
+    <Compile Include="Components\HL_RichTextBox\SyntaxHighlightDictionary.cs" />
+    <Compile Include="Components\HL_RichTextBox\RichTextBoxHighlighter.cs" />
+    <Compile Include="Components\SyntaxRichTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\frmEditTemplate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Components\frmEditTemplate.Designer.cs">
+      <DependentUpon>frmEditTemplate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Components\Resources.cs" />
+    <Compile Include="Components\sknComboBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\sknGroupBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\sknButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\sknCheckBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\sknLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\sknListBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\sknMaskedTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\sknPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\sknProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\sknRadioButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\sknTabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\sknTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\ValidateField.cs" />
+    <Compile Include="Components\WEBCAM\CamBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\WEBCAM\EmguCV.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\WEBCAM\PlayCap.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\WEBCAM\AviCap.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Components\WEBCAM\WCVision.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Forms\Expression.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Expression.Designer.cs">
+      <DependentUpon>Expression.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FormError.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormError.Designer.cs">
+      <DependentUpon>FormError.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmMsg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmMsg.Designer.cs">
+      <DependentUpon>frmMsg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Login.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Login.Designer.cs">
+      <DependentUpon>Login.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Functions.cs" />
+    <Compile Include="Models\frmBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Models\frmBase.Designer.cs">
+      <DependentUpon>frmBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\frmDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Models\frmDialog.Designer.cs">
+      <DependentUpon>frmDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Models\frmEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Models\frmEdit.Designer.cs">
+      <DependentUpon>frmEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Msg.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Components\frmEditTemplate.resx">
+      <DependentUpon>frmEditTemplate.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Expression.resx">
+      <DependentUpon>Expression.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FormError.resx">
+      <DependentUpon>FormError.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmMsg.resx">
+      <DependentUpon>frmMsg.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Login.resx">
+      <DependentUpon>Login.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\frmBase.resx">
+      <DependentUpon>frmBase.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\frmDialog.resx">
+      <DependentUpon>frmDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Models\frmEdit.resx">
+      <DependentUpon>frmEdit.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Style\ColorTable\CaptureMotionColorTable.cs" />
+    <Compile Include="Style\ColorTable\StyleColorTable.cs" />
+    <Compile Include="Style\StyleRenderer.cs" />
+    <Compile Include="Style\Office2007\Office2007ColorTable.cs" />
+    <Compile Include="Style\StyleHelpers.cs" />
+    <Compile Include="Style\Office2007\Office2007Renderer.cs" />
+    <Compile Include="Style\VS2010\VS2010ColorTable.cs" />
+    <Compile Include="Style\VS2010\VS2010Renderer.cs" />
+    <Compile Include="WinAPI\AVICAP32.cs" />
+    <Compile Include="WinAPI\Flags.cs" />
+    <Compile Include="WinAPI\GDI32.cs" />
+    <Compile Include="WinAPI\KERNEL32.cs" />
+    <Compile Include="WinAPI\USER32.cs" />
+    <Compile Include="WinAPI\Mouse.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\lupa_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\Login.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\CAMERA.ICO" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\Symbol-Information.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\Symbol-Exclamation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="img\Symbol-Help.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Components\sknButton.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Components\sknCheckBox.bmp" />
+    <EmbeddedResource Include="Components\sknLabel.bmp" />
+    <EmbeddedResource Include="Components\sknRadioButton.bmp" />
+    <EmbeddedResource Include="Components\sknTextBox.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Components\sknGroupBox.bmp" />
+    <EmbeddedResource Include="Components\sknMaskedTextBox.bmp" />
+    <EmbeddedResource Include="Components\sknPanel.bmp" />
+    <EmbeddedResource Include="Components\sknProgressBar.bmp" />
+    <EmbeddedResource Include="Components\sknTabControl.bmp" />
+    <EmbeddedResource Include="Components\WEBCAM\WebCam.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Components\sknComboBox.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Components\sknListBox.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Components\WEBCAM\PlayCap.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\lib.class\lib.Class.csproj">
+      <Project>{4A3F7BED-010A-48C8-8673-E484F0148BA8}</Project>
+      <Name>lib.Class</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

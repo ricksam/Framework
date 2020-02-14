@@ -1,0 +1,49 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using System.Diagnostics;
+using System.IO;
+
+namespace Teste
+{
+  public partial class TesteWebRequest : Form
+  {
+    public TesteWebRequest()
+    {
+      InitializeComponent();      
+    }
+
+    private void button1_Click(object sender, EventArgs e)
+    {
+      try
+      {
+        txtResposta.Text = lib.Class.WebUtils.GetWebResponse(txtLink.Text, txtPostData.Text,txtContentType.Text);
+      }
+      catch (Exception ex) { txtResposta.Text = ex.Message; }
+    }
+
+    private void txtResposta_Enter(object sender, EventArgs e)
+    {
+      txtResposta.SelectAll();
+    }
+
+    private void txtResposta_TextChanged(object sender, EventArgs e)
+    {
+      webBrowser1.ScriptErrorsSuppressed = true;
+      webBrowser1.DocumentText = txtResposta.Text;
+    }
+
+    private void button2_Click(object sender, EventArgs e)
+    {
+      if (dlgOpen.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+      {
+        lib.Class.Upload upload = new lib.Class.Upload();
+        upload.Send(txtLink.Text, "fileContents", dlgOpen.FileName);
+      }
+    }
+  }
+}
